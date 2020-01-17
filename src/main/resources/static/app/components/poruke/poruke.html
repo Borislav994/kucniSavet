@@ -1,0 +1,105 @@
+<div ng-controller="porukeCtrl">
+	<h1>Unesite vrednosti za poruku koji zelite da dodate:</h1>
+	<form>
+		<div class="form-group">
+			<label>Naslov</label> <input class="form-control"
+				ng-model="poruka.naslov" />
+		</div>
+		<div class="form-group">
+			<label>Tip</label> <select class="form-control"
+				ng-model="poruka.tip">
+				<option value="Predlog">Predlog</option>
+				<option value="Obavestenje">Obavestenje</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label>Opis</label> <input class="form-control"
+				ng-model="poruka.opis" />
+		</div>
+		<div class="form-group" ng-hide="poruka.tip == 'Obavestenje'">
+			<label>Potreban procenat</label> <input class="form-control" 
+				ng-model="poruka.potrebanProcenat" />
+		</div>
+		<div class="form-group">
+			<label>Zgrada</label> <select class="form-control"
+				ng-model="poruka.zgradaId">
+				<option ng-repeat="k in zgrade" value="{{k.id}}"
+					ng-selected="k.id == poruka.zgradaId">{{k.adresa}}</option>
+			</select>
+		</div>
+
+		<button type="button" ng-click="doAdd()" class="btn btn-success">Dodaj</button>
+	</form>
+
+	<br> <br>
+
+	<div class="col-3 col-lg-12">
+		<form>
+			<div class="form-group">
+			<label>Zgrada</label> <select class="form-control"
+				ng-model="searchParams.zgradaUlica">
+				<option ng-repeat="k in zgrade" value="{{k.adresa}}"
+					>{{k.adresa}}</option>
+			</select>
+		</div>
+			<div class="form-group">
+				<label>Naslov od:</label> <input class="form-control"
+					ng-model="searchParams.naslov" />
+			</div>
+			<div class="form-group">
+			<label>Tip</label> <select class="form-control"
+				ng-model="searchParams.tip">
+				<option value="Predlog">Predlog</option>
+				<option value="Obavestenje">Obavestenje</option>
+			</select>
+		</div>
+			
+			<button type="button" ng-click="doSearch()" class="btn btn-primary">Pretrazi</button>
+		</form>
+	</div>
+	
+	<div class="col-12 col-lg-12">
+
+			<div class="btn-group float-right">
+				<button ng-disabled="pageNum == 0" ng-click="changePage(-1)"
+					class="btn btn-info">Prosla</button>
+				<button ng-disabled="pageNum == totalPages - 1"
+					ng-click="changePage(1)" class="btn btn-info">Sledeca</button>
+			</div>
+
+			<br> <br>
+	<table class="table table-bordered table-striped">
+		<thead class="thead-dark">
+			<tr>
+				<th>Naslov</th>
+				<th>Tip</th>
+				<th>Opis</th>
+				<th>Potreban %</th>
+				<th>Zgrada</th>
+				<th>Izmeni</th>
+				<th>Obrisi</th>
+				<th>Glasaj</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="r in poruke">
+				<td>{{r.naslov}}</td>
+				<td>{{r.tip}}</td>
+				<td>{{r.opis}}</td>
+				<td>{{r.potrebanProcenat}}</td>
+				<td>{{r.zgradaAdresa}}</td>
+				<td><button class="btn btn-warning" ng-click="goToEdit(r.id)">
+						<i class="fa fa-pencil" aria-hidden="true"></i>
+					</button></td>
+				<td><button type="button" class="btn btn-danger"
+						ng-click="doDelete(r.id)">
+						<i class="fa fa-trash-o" aria-hidden="true"></i>
+					</button></td>
+				<td><button ng-hide= "r.tip == 'Obavestenje'" class="btn btn-info"
+				 ng-disabled="r.prihvacen == true"  ng-click="goToGlasaj(r.id)">
+						Glasaj</i>
+					</button></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
